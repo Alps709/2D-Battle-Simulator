@@ -15,8 +15,9 @@ public:
 	Gamesystem();
 
 	bool playGame();
-
 	bool getWin(int teamNum);
+
+	void playAgain();
 
 private:
 	Level _level;

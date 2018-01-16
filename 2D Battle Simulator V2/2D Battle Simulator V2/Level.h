@@ -47,8 +47,11 @@ public:
 	bool getIsDone() { return _isDone; }
 	bool getIsDone2() { return _isDone2; }
 
+	void clearCin();
+
 	int getUnitTeamSize(int teamNum);
 
+	void setIsDone(bool isDone);
 	void setIsDone2(bool isDone2);
 
 	void clearStuff();

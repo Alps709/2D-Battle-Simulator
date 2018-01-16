@@ -10,7 +10,19 @@
 
 #include "Unit.h"
 
+
 using namespace std;
+
+void Level::clearCin()
+{
+	cin.ignore(64, '\n'); //These two functions clear the input 
+	cin.clear();          //for when cin is next used, otherwise errors can occur
+}
+
+void Level::setIsDone(bool isDone)
+{
+	_isDone = isDone;
+}
 
 void Level::setIsDone2(bool isDone2)
 {
@@ -19,7 +31,6 @@ void Level::setIsDone2(bool isDone2)
 
 int Level::getUnitTeamSize(int teamNum)
 {
-
 	int numAlive = 0;
 
 	for (int i = 0; i < _unitTeam[teamNum].size(); i++)
@@ -34,9 +45,9 @@ int Level::getUnitTeamSize(int teamNum)
 
 void Level::startGame()
 {
-
 	printf("Welcome to the 2D Combat Simulator!\n\nPlease enter your name: ");
-	getline(cin, _name);
+	cin >> _name;
+	clearCin();
 	system("cls");
 	printf("Welcome to the 2D Combat Simulator %s!\n\n", _name.c_str());
 	printf("This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
@@ -47,7 +58,6 @@ void Level::startGame()
 
 void Level::initUnits()
 {
-
 	_units.push_back(Unit("Soldier", 'S', 20, 5, 100));
 	_units.push_back(Unit("Berserker", 'B', 35, 1, 100));
 	_units.push_back(Unit("Guardian", 'G', 11, 10, 100));
@@ -56,15 +66,12 @@ void Level::initUnits()
 	_units.push_back(Unit("Ogre", 'O', 35, 5, 150));
 	_units.push_back(Unit("Dragon", 'D', 50, 10, 300));
 	_units.push_back(Unit("NOUNIT", '.', 0, 0, 0));
-
 }
 
 bool Level::chooseUnit()
 {
-
 	while (true)
 	{
-
 		string unitName;
 		bool validName = false;
 
@@ -72,13 +79,12 @@ bool Level::chooseUnit()
 		printf("Choose which unit you want on your team.\nThese are the units you have to choose from:\n\n");
 		listUnits();
 
-		getline(cin, unitName);
-
+		cin >> unitName;
+		clearCin();
 
 		//allows you to choose unit by entering the full unit name
 		for (int i = 0; i < _units.size() - 1; i++)
 		{
-
 			if (_units[i].getName() == unitName)
 			{
 				_unit.setTeamName(unitName);
@@ -124,10 +130,8 @@ bool Level::chooseUnit()
 
 bool Level::chooseEnemyUnit()
 {
-
 	while (true)
 	{
-
 		string unitEnemyName;
 		bool validName = false;
 
@@ -135,8 +139,8 @@ bool Level::chooseEnemyUnit()
 		printf("Choose which unit you want on the enemy team.\nThese are the units you have to choose from:\n\n");
 		listUnits();
 
-
-		getline(cin, unitEnemyName);
+		cin >> unitEnemyName;
+		clearCin();
 
 		//allows you to choose unit by entering the full unit name
 		for (int i = 0; i < _units.size() - 1; i++)
@@ -148,7 +152,6 @@ bool Level::chooseEnemyUnit()
 				return false;
 			}
 		}
-
 
 		if (unitEnemyName != "")
 		{
@@ -162,7 +165,6 @@ bool Level::chooseEnemyUnit()
 
 				for (int i = 0; i < _units.size(); i++)
 				{
-
 					if (unitNumber == j)
 					{
 						unitEnemyName = _units[j - 1].getName();
@@ -181,14 +183,11 @@ bool Level::chooseEnemyUnit()
 		cout << "\nYou inputted: " << unitEnemyName << "\n\n";
 		cout << "That is an invalid unit name! Please try again.\n";
 		system("PAUSE");
-
 	}
 }
 
-
 void Level::listUnits()
 {
-
 	string name;
 	int attack;
 	int defence;
@@ -199,43 +198,37 @@ void Level::listUnits()
 		_units[i].getStats(name, attack, defence, hitpoints);
 		printf("%i. %s: Attack %i, Defence %i, Hitpoints %i.\n\n", i + 1, name.c_str(), attack, defence, hitpoints);
 	}
-
-
 }
 
 void Level::chooseYTeamSize()
 {
-
 	system("cls");
 
 	int size;
 
 	printf("How many units do you want in your team?\n");
 	cin >> size;
-	cin.ignore(64, '\n'); //These two functions clear the input 
-	cin.clear();          //for when cin is next used, otherwise errors can occur
+	clearCin();
 	_unit.setTeamSize(size);
 }
 
 void Level::chooseETeamSize()
 {
-
 	system("cls");
 
 	int size;
 
 	printf("How many units do you want in the enemy team?\n");
-	cin >> size;
-	cin.ignore(64, '\n'); //These two functions clear the input 
-	cin.clear();          //for when cin is next used, otherwise errors can occur
-	_unit.setEnemySize(size);
 
+	cin >> size;
+	clearCin();
+
+	_unit.setEnemySize(size);
 	system("cls");
 }
 
 void Level::generateTeams()
 {
-
 	string yourUnitName = _unit.getTeamName();
 	string enemyUnitName = _unit.getEnemyName();
 
@@ -248,21 +241,21 @@ void Level::generateTeams()
 			for (int j = 0; j < _unit.getTeamSize(); j++)
 			{
 				_unitTeam[0].push_back(_units[i]);
+				_unitTeam[0][j].setTeamNum(0);
 			}
 			break;
 		}
 	}
 
-
 	//Enemy team gets generated and stored in the vector
 	for (int i = 0; i <= _units.size(); i++)
 	{
-
 		if (enemyUnitName == _units[i].getName())
 		{
 			for (int j = 0; j < _unit.getEnemySize(); j++)
 			{
 				_unitTeam[1].push_back(_units[i]);
+				_unitTeam[1][j].setTeamNum(1);
 			}
 			break;
 		}
@@ -271,10 +264,6 @@ void Level::generateTeams()
 
 void Level::generateBattlefield()
 {
-
-	//used as placeholder Unit
-
-
 	float battleFieldSize = (_unit.getTeamSize() + _unit.getEnemySize()) * 1.5f;
 	float battleFieldLength = sqrt(battleFieldSize);
 
@@ -309,7 +298,6 @@ void Level::generateBattlefield()
 			if (team0Num >= 0)
 			{
 				_unitTeam[0][team0Num].setUnitCoords(i, j);
-				_unitTeam[0][team0Num].setTeamNum(0);
 				battleTile.push_back(move(&_unitTeam[0][team0Num]));
 				team0Num--;
 			}

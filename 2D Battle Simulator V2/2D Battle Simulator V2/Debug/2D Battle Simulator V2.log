@@ -1,0 +1,20 @@
+﻿  Level.cpp
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(36): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(86): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(105): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(146): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(166): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(196): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(236): warning C4018: '<=': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(251): warning C4018: '<=': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(271): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(390): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(436): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(439): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(479): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(516): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(550): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(580): warning C4018: '<': signed/unsigned mismatch
+c:\dev\versioncontrol\projects\2d battle simulator\2d battle simulator v2\2d battle simulator v2\level.cpp(681): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  2D Battle Simulator V2.vcxproj -> C:\dev\VersionControl\Projects\2D Battle Simulator\2D Battle Simulator V2\Debug\2D Battle Simulator V2.exe
+  2D Battle Simulator V2.vcxproj -> C:\dev\VersionControl\Projects\2D Battle Simulator\2D Battle Simulator V2\Debug\2D Battle Simulator V2.pdb (Partial PDB)
