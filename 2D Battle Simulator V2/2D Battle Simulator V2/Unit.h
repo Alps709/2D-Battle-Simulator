@@ -15,20 +15,20 @@ public:
 
 	void takeDamage(int attackRoll);
 
-	//Getters
-	string getName() { return _unitName; };
-	string getTeamName() { return _unitTeamName; }
-	string getEnemyName() { return _unitEnemyName; }
+	//Getters (should all be const, unless static)
+	string getName() const { return _unitName; };
+	string getTeamName() const { return _unitTeamName; }
+	string getEnemyName() const { return _unitEnemyName; }
 
-	int getTeamNum() { return _unitTeamNum; }
-	int getTeamSize() { return _unitTeamSize; };
-	int getEnemySize() { return _unitEnemySize; };
-	int getHealth() { return _hitpoints; }
-	int getAttack() { return _attack; }
-	int getDefence() { return _defence; }
-	int getXPos() { return _xpos; }
-	int getYPos() { return _ypos; }
-	int getClosestEnemyNum() { return _closestEnemyNum; }
+	static int getTeamNum() { return _unitTeamNum; }
+	static int getTeamSize() { return _unitTeamSize; };
+	static int getEnemySize() { return _unitEnemySize; };
+	int getHealth() const { return _hitpoints; }
+	int getAttack() const { return _attack; }
+	int getDefence() const { return _defence; }
+	int getXPos() const { return _xpos; }
+	int getYPos() const { return _ypos; }
+	int getClosestEnemyNum() const { return _closestEnemyNum; }
 
 	char getTile() { return _tile; };
 
@@ -37,29 +37,30 @@ public:
 
 
 	//Setters
-	void setTeamSize(int size);
-	void setEnemySize(int size);
-	void setTeamName(string name);
-	void setEnemyName(string name);
-	void setTeamNum(int num);
+	static void setTeamSize(int size);
+	static void setEnemySize(int size);
+	static void setTeamName(string name);
+	static void setEnemyName(string name);
+	static void setTeamNum(int num);
+
 	void setClosestEnemyNum(int number);
 	void setUnitCoords(int ypos, int xpos);
 
 
 private:
 
-	char _tile;
+	static int _unitTeamNum;
+	static int _unitTeamSize;
+	static int _unitEnemySize;
+	static string _unitTeamName;
+	static string _unitEnemyName;
+
 	string _unitName;
-	int _unitTeamNum;
-	int _unitTeamSize;
-	string _unitTeamName;
-	string _unitEnemyName;
-	int _unitEnemySize;
+	char _tile;
 	int _closestEnemyNum;
 	int _attack;
 	int _defence;
 	int _hitpoints;
-
 
 	//postion
 	int _xpos;

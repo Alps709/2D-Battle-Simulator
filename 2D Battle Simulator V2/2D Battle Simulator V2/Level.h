@@ -11,13 +11,11 @@
 using namespace std;
 
 
-class Level
+namespace Level
 {
-public:
-	Level() {};
 
-	void startGame();
-	void initUnits();
+	static vector <Unit> units;
+
 	bool chooseUnit();
 	bool chooseEnemyUnit();
 	void chooseYTeamSize();
@@ -27,8 +25,6 @@ public:
 	void generateTeams();
 	void generateBattlefield();
 	void printBattleStats();
-	void updateVisBattleField();
-	void print();
 	void printBattleField();
 
 	void yourTeamMove();
@@ -44,33 +40,8 @@ public:
 
 	int setDefenderTeamNum(int attackingTeamNum);
 
-	bool getIsDone() { return _isDone; }
-	bool getIsDone2() { return _isDone2; }
-
-	void clearCin();
-
 	int getUnitTeamSize(int teamNum);
 
-	void setIsDone(bool isDone);
-	void setIsDone2(bool isDone2);
-
 	void clearStuff();
-
-
-private:
-	bool _isDone;
-	bool _isDone2;
-	string _name;
-	int _battleFieldSQRT;
-	int _visBattleFieldSQRT;
-	int _battleFieldTrueSize;
-
-
-	Unit _unit;
-	vector <Unit> _units;
-	vector <Unit> _unitTeam[2];
-
-	vector <vector <char> > _visibleBattleField;
-	vector <vector <Unit*> > _battleField;
 };
 

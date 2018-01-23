@@ -1,33 +1,21 @@
-#include "Level.h"
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <vector>
-#include <conio.h>
 #include <math.h>
 #include <random>
 #include <ctime>
 
-#include "Unit.h"
+#include "Level.h"
+#include "GameSystem.h"
 
 
 using namespace std;
 
-void Level::clearCin()
-{
-	cin.ignore(64, '\n'); //These two functions clear the input 
-	cin.clear();          //for when cin is next used, otherwise errors can occur
-}
+int _battleFieldSQRT;
+int _visBattleFieldSQRT;
+int _battleFieldTrueSize;
 
-void Level::setIsDone(bool isDone)
-{
-	_isDone = isDone;
-}
+vector <Unit> _unitTeam[2];
 
-void Level::setIsDone2(bool isDone2)
-{
-	_isDone2 = isDone2;
-}
+vector <vector <Unit*> > _battleField;
+
 
 int Level::getUnitTeamSize(int teamNum)
 {
@@ -43,30 +31,6 @@ int Level::getUnitTeamSize(int teamNum)
 	return numAlive;
 }
 
-void Level::startGame()
-{
-	printf("Welcome to the 2D Combat Simulator!\n\nPlease enter your name: ");
-	cin >> _name;
-	clearCin();
-	system("cls");
-	printf("Welcome to the 2D Combat Simulator %s!\n\n", _name.c_str());
-	printf("This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
-		"You will be able to choose what type of unit each team will get\nand how many will be in each team."
-		"\nWhich ever team defeats all of the other teams units will win.\n");
-	system("PAUSE");
-}
-
-void Level::initUnits()
-{
-	_units.push_back(Unit("Soldier", 'S', 20, 5, 100));
-	_units.push_back(Unit("Berserker", 'B', 35, 1, 100));
-	_units.push_back(Unit("Guardian", 'G', 11, 10, 100));
-	_units.push_back(Unit("Wizard", 'W', 40, 0, 100));
-	_units.push_back(Unit("Goblin", 'G', 10, 0, 50));
-	_units.push_back(Unit("Ogre", 'O', 35, 5, 150));
-	_units.push_back(Unit("Dragon", 'D', 50, 10, 300));
-	_units.push_back(Unit("NOUNIT", '.', 0, 0, 0));
-}
 
 bool Level::chooseUnit()
 {
@@ -80,14 +44,14 @@ bool Level::chooseUnit()
 		listUnits();
 
 		cin >> unitName;
-		clearCin();
+		Gamesystem::clearCin();
 
 		//allows you to choose unit by entering the full unit name
-		for (int i = 0; i < _units.size() - 1; i++)
+		for (int i = 0; i < units.size() - 1; i++)
 		{
-			if (_units[i].getName() == unitName)
+			if (units[i].getName() == unitName)
 			{
-				_unit.setTeamName(unitName);
+				Unit::setTeamName(unitName);
 				return false;
 			}
 		}
@@ -102,13 +66,12 @@ bool Level::chooseUnit()
 			{
 				int j = 1;
 
-				for (int i = 0; i < _units.size() - 1; i++)
+				for (int i = 0; i < units.size() - 1; i++)
 				{
 
 					if (unitNumber == j)
 					{
-						unitName = _units[j - 1].getName();
-						_unit.setTeamName(unitName);
+						Unit::setTeamName(units[j - 1].getName());
 						return false;
 					}
 					j++;
@@ -140,15 +103,15 @@ bool Level::chooseEnemyUnit()
 		listUnits();
 
 		cin >> unitEnemyName;
-		clearCin();
+		Gamesystem::clearCin();
 
 		//allows you to choose unit by entering the full unit name
-		for (int i = 0; i < _units.size() - 1; i++)
+		for (int i = 0; i < units.size() - 1; i++)
 		{
 
-			if (_units[i].getName() == unitEnemyName)
+			if (units[i].getName() == unitEnemyName)
 			{
-				_unit.setEnemyName(unitEnemyName);
+				Unit::setEnemyName(unitEnemyName);
 				return false;
 			}
 		}
@@ -163,12 +126,11 @@ bool Level::chooseEnemyUnit()
 			{
 				int j = 1;
 
-				for (int i = 0; i < _units.size(); i++)
+				for (int i = 0; i < units.size(); i++)
 				{
 					if (unitNumber == j)
 					{
-						unitEnemyName = _units[j - 1].getName();
-						_unit.setEnemyName(unitEnemyName);
+						Unit::setEnemyName(units[j - 1].getName());
 						return false;
 					}
 					j++;
@@ -193,9 +155,9 @@ void Level::listUnits()
 	int defence;
 	int hitpoints;
 
-	for (int i = 0; i < _units.size() - 1; i++)
+	for (int i = 0; i < units.size() - 1; i++)
 	{
-		_units[i].getStats(name, attack, defence, hitpoints);
+		units[i].getStats(name, attack, defence, hitpoints);
 		printf("%i. %s: Attack %i, Defence %i, Hitpoints %i.\n\n", i + 1, name.c_str(), attack, defence, hitpoints);
 	}
 }
@@ -208,8 +170,8 @@ void Level::chooseYTeamSize()
 
 	printf("How many units do you want in your team?\n");
 	cin >> size;
-	clearCin();
-	_unit.setTeamSize(size);
+	Gamesystem::clearCin();
+	Unit::setTeamSize(size);
 }
 
 void Level::chooseETeamSize()
@@ -221,26 +183,26 @@ void Level::chooseETeamSize()
 	printf("How many units do you want in the enemy team?\n");
 
 	cin >> size;
-	clearCin();
+	Gamesystem::clearCin();
 
-	_unit.setEnemySize(size);
+	Unit::setEnemySize(size);
 	system("cls");
 }
 
 void Level::generateTeams()
 {
-	string yourUnitName = _unit.getTeamName();
-	string enemyUnitName = _unit.getEnemyName();
-
+	string yourUnitName = _unitTeam[0][0].getTeamName();
+	string enemyUnitName = _unitTeam[1][0].getEnemyName();
+	 
 	//Your team gets generated and stored in the vector
-	for (int i = 0; i <= _units.size(); i++)
+	for (int i = 0; i <= units.size(); i++)
 	{
 
-		if (yourUnitName == _units[i].getName())
+		if (yourUnitName == units[i].getName())
 		{
-			for (int j = 0; j < _unit.getTeamSize(); j++)
+			for (int j = 0; j < Unit::getTeamSize(); j++)
 			{
-				_unitTeam[0].push_back(_units[i]);
+				_unitTeam[0].push_back(units[i]);
 				_unitTeam[0][j].setTeamNum(0);
 			}
 			break;
@@ -248,13 +210,13 @@ void Level::generateTeams()
 	}
 
 	//Enemy team gets generated and stored in the vector
-	for (int i = 0; i <= _units.size(); i++)
+	for (int i = 0; i <= units.size(); i++)
 	{
-		if (enemyUnitName == _units[i].getName())
+		if (enemyUnitName == units[i].getName())
 		{
-			for (int j = 0; j < _unit.getEnemySize(); j++)
+			for (int j = 0; j < Unit::getEnemySize(); j++)
 			{
-				_unitTeam[1].push_back(_units[i]);
+				_unitTeam[1].push_back(units[i]);
 				_unitTeam[1][j].setTeamNum(1);
 			}
 			break;
@@ -264,7 +226,7 @@ void Level::generateTeams()
 
 void Level::generateBattlefield()
 {
-	float battleFieldSize = (_unit.getTeamSize() + _unit.getEnemySize()) * 1.5f;
+	float battleFieldSize = (Unit::getTeamSize() + Unit::getEnemySize()) * 1.5f;
 	float battleFieldLength = sqrt(battleFieldSize);
 
 	//used for both width and height of the hidden battlefield
@@ -272,20 +234,14 @@ void Level::generateBattlefield()
 
 	_battleFieldTrueSize = _battleFieldSQRT * _battleFieldSQRT;
 
-	//used for both width and height of the visible battlefield
-	_visBattleFieldSQRT = _battleFieldSQRT + 2;
-
-
 	//show size of variables for debugging purposes
-	/*
-	cout << battleFieldSize <<
-	endl << battleFieldLength <<
-	endl << _battleFieldSQRT <<
-	endl << _visBattleFieldSQRT << endl;
-	*/
+
+	//cout << battleFieldSize     << endl;
+	//	   << battleFieldLength   << endl 
+	//	   << _battleFieldSQRT	  << endl;
 
 
-	//Initialise the hidden battlefield
+	//Initialise the battlefield
 
 	//team0 is initialised first
 	int team0Num = _unitTeam[0].size() - 1;
@@ -305,7 +261,7 @@ void Level::generateBattlefield()
 			{
 				//if all of team 0's units have been assigned a place on the board, 
 				//fill the rest with place holder units.
-				battleTile.push_back(move(&_units[_units.size() - 1]));
+				battleTile.push_back(move(&units[units.size() - 1]));
 			}
 		}
 		_battleField.push_back(move(battleTile));
@@ -333,56 +289,19 @@ void Level::generateBattlefield()
 			}
 		}
 	}
-
-
-
-
-	//initialise the visible battlefield
-	for (int f = 0; f < _visBattleFieldSQRT; f++)
-	{
-		vector <char> visBattleTile;
-		//If it's the first/last iteration of the loop, set the first/last wall
-		if (f == 0 || f == _visBattleFieldSQRT - 1)
-		{
-			for (int c = 0; c < _visBattleFieldSQRT; c++)
-			{
-				visBattleTile.push_back('#');
-			}
-
-		}
-		else
-		{
-			//set left side wall for this row of the battlefield
-			visBattleTile.push_back('#');
-
-			//set visible battle field to the tiles of the soldiers
-			for (int g = 1; g < _visBattleFieldSQRT - 1; g++)
-			{
-				visBattleTile.push_back(move(_battleField[f - 1][g - 1]->getTile()));
-			}
-			//set right side wall for this row of the battlefield
-			visBattleTile.push_back('#');
-		}
-		_visibleBattleField.push_back(move(visBattleTile));
-	}
-
-
 	system("PAUSE");
 }
 
 void Level::clearStuff()
 {
-
 	_battleField.clear();
-	_visibleBattleField.clear();
 }
 
 void Level::printBattleStats()
 {
-
-
 	int units0Alive = 0;
 	int units1Alive = 0;
+
 	//first loop to change between the teams
 	for (int j = 0; j < 2; j++)
 	{
@@ -401,27 +320,10 @@ void Level::printBattleStats()
 			}
 		}
 	}
-
 	//displays # of alive units
 	cout << "Total units alive: " << units0Alive + units1Alive << ".\n"
 		<< "Number of Team 1's units alive: " << units0Alive << ".\n"
 		<< "Number of Team 2's units alive: " << units1Alive << ".\n";
-
-
-}
-
-void Level::print()
-{
-
-	//print the visibleBattlefield
-	for (int i = 0; i < _visBattleFieldSQRT; i++)
-	{
-		for (int j = 0; j < _visBattleFieldSQRT; j++)
-		{
-			cout << _visibleBattleField[i][j] << "  ";
-		}
-		cout << endl;
-	}
 }
 
 void Level::printBattleField()
@@ -450,23 +352,10 @@ void Level::printBattleField()
 
 }
 
-void Level::updateVisBattleField()
-{
-
-	for (int i = 0; i < _battleFieldSQRT - 1; i++)
-	{
-		for (int j = 0; j < _battleFieldSQRT - 1; j++)
-		{
-			_visibleBattleField[i + 1][j + 1] = _battleField[i][j]->getTile();
-		}
-	}
-
-}
-
 void Level::yourTeamMove()
 {
 
-	//num of units in the team that have been moved
+	//num of units in the team that have been moved this turn
 	int teamUnitNum = 0;
 
 	for (int i = 0; i < _battleFieldSQRT; i++)
@@ -476,13 +365,11 @@ void Level::yourTeamMove()
 			//makes sure it only does same # of checks as # of units in the team
 			if (teamUnitNum < _unitTeam[0].size()
 				//checks if the unit has the right tile
-				&& _visibleBattleField[i + 1][j + 1] == _unitTeam[0][0].getTile()
+				&& _battleField[i][j]->getTile() == _unitTeam[0][0].getTile()
 				//checks if the unit is in the right team
 				&& _battleField[i][j]->getTeamNum() == 0)
 			{
-
 				int unitYPos, unitXPos;
-
 				_battleField[i][j]->getPos(unitYPos, unitXPos);
 
 				//iterates through the enemy team and compares the position of each enemy unit
@@ -490,9 +377,10 @@ void Level::yourTeamMove()
 				//saves the shortest distance while iterating, until it is done.
 				_battleField[i][j]->setClosestEnemyNum(findClosestUnit(unitYPos, unitXPos));
 
+				//Handles moving or battling of the selected unit
 				moveUnit(_battleField[i][j]);
 
-				//incremented to say we have moved another unit
+				//incremented to say we have moved another unit this turn
 				teamUnitNum++;
 			}
 		}
@@ -503,7 +391,7 @@ void Level::yourTeamMove()
 void Level::enemyTeamMove()
 {
 
-	//num of units in the team that have been moved
+	//num of units in the team that have been moved this turn
 	int enemyUnitNum = 0;
 
 	for (int i = _battleFieldSQRT; i >= 0; i--)
@@ -513,13 +401,11 @@ void Level::enemyTeamMove()
 			//makes sure it only does same # of checks as # of units in the team
 			if (enemyUnitNum < _unitTeam[1].size()
 				//checks if the unit has the right tile
-				&& _visibleBattleField[i + 1][j + 1] == _unitTeam[1][0].getTile()
+				&& _battleField[i][j]->getTile() == _unitTeam[1][0].getTile()
 				//checks if the unit is in the right team
 				&& _battleField[i][j]->getTeamNum() == 1)
 			{
-
 				int unitYPos, unitXPos;
-
 				_battleField[i][j]->getPos(unitYPos, unitXPos);
 
 				//iterates through the enemy team and compares the position of each enemy unit
@@ -527,11 +413,11 @@ void Level::enemyTeamMove()
 				//saves the shortest distance while iterating, until it is done.
 				_battleField[i][j]->setClosestEnemyNum(findClosestEnemyUnit(unitYPos, unitXPos));
 
+				//Handles moving or battling of the selected unit
 				moveUnit(_battleField[i][j]);
 
-				//incremented to say we have moved another unit
+				//incremented to say we have moved another enemy unit this turn
 				enemyUnitNum++;
-
 			}
 		}
 	}
@@ -634,17 +520,13 @@ void Level::moveUnit(Unit *movingUnit)
 	 //move down
 		movingUnit->setUnitCoords(unitYpos + 1, unitXpos);
 		_battleField[unitYpos + 1][unitXpos] = movingUnit;
-		_battleField[unitYpos][unitXpos] = &_units[_units.size() - 1];
-		_visibleBattleField[unitYpos + 2][unitXpos + 1] = movingUnit->getTile();
-		_visibleBattleField[unitYpos + 1][unitXpos + 1] = '.';
+		_battleField[unitYpos][unitXpos] = &units[units.size() - 1];
 	}
 	else if (ady >= adx && dy < 0 && canMove(unitYpos, unitXpos, -1, 0))
 	{	//move up
 		movingUnit->setUnitCoords(unitYpos - 1, unitXpos);
 		_battleField[unitYpos - 1][unitXpos] = movingUnit;
-		_battleField[unitYpos][unitXpos] = &_units[_units.size() - 1];
-		_visibleBattleField[unitYpos][unitXpos + 1] = movingUnit->getTile();
-		_visibleBattleField[unitYpos + 1][unitXpos + 1] = '.';
+		_battleField[unitYpos][unitXpos] = &units[units.size() - 1];
 	}
 	else if (adx > ady && dx > 0 && canMove(unitYpos, unitXpos, 0, 1))
 	{//move towards enemy along x axis
@@ -652,17 +534,13 @@ void Level::moveUnit(Unit *movingUnit)
 	 //move right
 		movingUnit->setUnitCoords(unitYpos, unitXpos + 1);
 		_battleField[unitYpos][unitXpos + 1] = movingUnit;
-		_battleField[unitYpos][unitXpos] = &_units[_units.size() - 1];
-		_visibleBattleField[unitYpos + 1][unitXpos + 2] = movingUnit->getTile();
-		_visibleBattleField[unitYpos + 1][unitXpos + 1] = '.';
+		_battleField[unitYpos][unitXpos] = &units[units.size() - 1];
 	}
 	else if (adx > ady && dx < 0 && canMove(unitYpos, unitXpos, 0, -1))
 	{  	//move left
 		movingUnit->setUnitCoords(unitYpos, unitXpos - 1);
 		_battleField[unitYpos][unitXpos - 1] = movingUnit;
-		_battleField[unitYpos][unitXpos] = &_units[_units.size() - 1];
-		_visibleBattleField[unitYpos + 1][unitXpos] = movingUnit->getTile();
-		_visibleBattleField[unitYpos + 1][unitXpos + 1] = '.';
+		_battleField[unitYpos][unitXpos] = &units[units.size() - 1];
 	}
 
 }
@@ -689,8 +567,7 @@ void Level::unitsBattle(Unit *attackingUnit, Unit *defendingUnit)
 		//Defending unit died
 		int unitYpos, unitXpos;
 		defendingUnit->getPos(unitYpos, unitXpos);
-		_battleField[unitYpos][unitXpos] = &_units[_units.size() - 1];
-		_visibleBattleField[unitYpos + 1][unitXpos + 1] = '.';
+		_battleField[unitYpos][unitXpos] = &units[units.size() - 1];
 	}
 
 }

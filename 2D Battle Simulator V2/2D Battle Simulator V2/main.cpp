@@ -11,13 +11,13 @@ using namespace std;
 int main()
 {
 
-	Gamesystem gameSystem;
+
 
 	bool isGameDone = false;
 
 	while (isGameDone == false)
 	{
-		isGameDone = gameSystem.playGame();
+		isGameDone = Gamesystem::playGame();
 	}
 
 
