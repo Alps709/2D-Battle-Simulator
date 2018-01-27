@@ -1,34 +1,29 @@
 #include "Gamesystem.h"
-
+#include "Level.h"
 
 using namespace std;
+
+vector <Unit> Level::units;
 
 string _playerName;
 
 bool isDone;
 bool isDone2;
 
-void initGame();
+void getWin();
+void initUnits();
 void startGame();
 void playAgain();
-void initUnits();
 
 //Getters
-bool getWin(int teamNum);
-bool getIsDone() { return isDone; }
-bool getIsDone2() { return isDone2; }
-
-
-void initGame()
-{
-	startGame();
-	initUnits();
-}
+bool checkWin(int teamNum);
 
 bool Gamesystem::playGame()
 {
+	initUnits();
+	startGame();
 
-	while (getIsDone() == false)
+	while (isDone == false)
 	{
 
 		//if you enter q it exits the loop and stops the program
@@ -48,34 +43,26 @@ bool Gamesystem::playGame()
 		Level::generateTeams();
 		Level::generateBattlefield();
 
-		while (getIsDone2() == false)
+		//Initial print of the board
+		Level::printBattleStats();
+		Level::printBattleField();
+		_getch();
+
+		isDone2 = false;
+		while (isDone2 == false)
 		{
 			//The teams units all move
 			Level::yourTeamMove();
 			Level::enemyTeamMove();
 
+			//Updates board
 			system("cls");
 			Level::printBattleStats();
 			Level::printBattleField();
 			_getch();
 
 			//checks if a team won
-			if (getWin(0) && getWin(1))
-			{
-				cout << "YOU TIED!\n";
-				playAgain();
-			}
-			else if (getWin(1))
-			{
-				cout << "YOU WON!\n";
-				playAgain();
-			}
-			else if (getWin(0))
-			{
-				cout << "YOU LOST!\n";
-				playAgain();
-			}
-			
+			getWin();
 		}
 		Level::clearStuff();
 	}
@@ -125,7 +112,8 @@ void playAgain()
 		}
 		else if (yesOrNo == "n" || yesOrNo == "N")
 		{
-			isDone2 = false;
+			isDone = true;
+			isDone2 = true;
 			return;
 		}
 		else
@@ -135,9 +123,28 @@ void playAgain()
 	}
 }
 
-bool getWin(int teamNum)
+bool checkWin(int teamNum)
 {
 	return (Level::getUnitTeamSize(teamNum) == 0);
+}
+
+void getWin()
+{
+	if (checkWin(0) && checkWin(1))
+	{
+		cout << "\nYOU TIED!\n";
+		playAgain();
+	}
+	else if (checkWin(1))
+	{
+		cout << "\nYOU WON!\n";
+		playAgain();
+	}
+	else if (checkWin(0))
+	{
+		cout << "\nYOU LOST!\n";
+		playAgain();
+	}
 }
 
 void Gamesystem::clearCin()

@@ -7,14 +7,13 @@
 
 #include "Unit.h"
 
-
 using namespace std;
+
 
 
 namespace Level
 {
-
-	static vector <Unit> units;
+	extern vector <Unit> units;
 
 	bool chooseUnit();
 	bool chooseEnemyUnit();

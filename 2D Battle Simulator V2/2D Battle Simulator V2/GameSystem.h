@@ -4,7 +4,6 @@
 #include <string>
 #include <conio.h>
 
-#include "Level.h"
 #include "windows.h"
 
 using namespace std;

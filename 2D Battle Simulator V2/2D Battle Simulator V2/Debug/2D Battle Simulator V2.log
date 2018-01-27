@@ -1,16 +1,3 @@
 ﻿  GameSystem.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
-  Level.cpp
-Level.obj : error LNK2001: unresolved external symbol "private: static int Unit::_unitTeamNum" (?_unitTeamNum@Unit@@0HA)
-Unit.obj : error LNK2001: unresolved external symbol "private: static int Unit::_unitTeamNum" (?_unitTeamNum@Unit@@0HA)
-Level.obj : error LNK2001: unresolved external symbol "private: static int Unit::_unitTeamSize" (?_unitTeamSize@Unit@@0HA)
-Unit.obj : error LNK2001: unresolved external symbol "private: static int Unit::_unitTeamSize" (?_unitTeamSize@Unit@@0HA)
-Level.obj : error LNK2001: unresolved external symbol "private: static int Unit::_unitEnemySize" (?_unitEnemySize@Unit@@0HA)
-Unit.obj : error LNK2001: unresolved external symbol "private: static int Unit::_unitEnemySize" (?_unitEnemySize@Unit@@0HA)
-Level.obj : error LNK2001: unresolved external symbol "private: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > Unit::_unitTeamName" (?_unitTeamName@Unit@@0V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A)
-Unit.obj : error LNK2001: unresolved external symbol "private: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > Unit::_unitTeamName" (?_unitTeamName@Unit@@0V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A)
-Level.obj : error LNK2001: unresolved external symbol "private: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > Unit::_unitEnemyName" (?_unitEnemyName@Unit@@0V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A)
-Unit.obj : error LNK2001: unresolved external symbol "private: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > Unit::_unitEnemyName" (?_unitEnemyName@Unit@@0V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A)
-C:\dev\VersionControl\Projects\2D Battle Simulator\2D Battle Simulator V2\Debug\2D Battle Simulator V2.exe : fatal error LNK1120: 5 unresolved externals
+  2D Battle Simulator V2.vcxproj -> C:\dev\VersionControl\Projects\2D Battle Simulator\2D Battle Simulator V2\Debug\2D Battle Simulator V2.exe
+  2D Battle Simulator V2.vcxproj -> C:\dev\VersionControl\Projects\2D Battle Simulator\2D Battle Simulator V2\Debug\2D Battle Simulator V2.pdb (Partial PDB)

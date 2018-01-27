@@ -15,14 +15,14 @@ public:
 
 	void takeDamage(int attackRoll);
 
-	//Getters (should all be const, unless static)
-	string getName() const { return _unitName; };
-	string getTeamName() const { return _unitTeamName; }
-	string getEnemyName() const { return _unitEnemyName; }
+	//Getters 
+	string getName() { return _unitName; };
+	static string getTeamName() { return _unitTeamName; }
+	static string getEnemyName() { return _unitEnemyName; }
 
-	static int getTeamNum() { return _unitTeamNum; }
 	static int getTeamSize() { return _unitTeamSize; };
 	static int getEnemySize() { return _unitEnemySize; };
+	int getTeamNum() { return _unitTeamNum; }
 	int getHealth() const { return _hitpoints; }
 	int getAttack() const { return _attack; }
 	int getDefence() const { return _defence; }
@@ -37,11 +37,12 @@ public:
 
 
 	//Setters
+	void setTeamNum(int num);
 	static void setTeamSize(int size);
 	static void setEnemySize(int size);
 	static void setTeamName(string name);
 	static void setEnemyName(string name);
-	static void setTeamNum(int num);
+	
 
 	void setClosestEnemyNum(int number);
 	void setUnitCoords(int ypos, int xpos);
@@ -49,7 +50,6 @@ public:
 
 private:
 
-	static int _unitTeamNum;
 	static int _unitTeamSize;
 	static int _unitEnemySize;
 	static string _unitTeamName;
@@ -57,6 +57,7 @@ private:
 
 	string _unitName;
 	char _tile;
+	int _unitTeamNum;
 	int _closestEnemyNum;
 	int _attack;
 	int _defence;

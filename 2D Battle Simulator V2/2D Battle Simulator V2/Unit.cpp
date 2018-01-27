@@ -1,9 +1,14 @@
 #include "Unit.h"
 
+//int Unit::_unitTeamNum;
+int Unit::_unitTeamSize;
+int Unit::_unitEnemySize;
+string Unit::_unitTeamName;
+string Unit::_unitEnemyName;
+
 Unit::Unit(string name, char tile, int attack, int defence, int hitpoints)
-	:_tile(tile), _unitName(name), _attack(attack), _defence(defence), _hitpoints(hitpoints)
-{
-}
+:_tile(tile), _unitName(name), _attack(attack), _defence(defence), _hitpoints(hitpoints)
+{}
 
 void Unit::getStats(string &name, int &attack, int &defence, int &hitpoints)
 {
@@ -53,14 +58,12 @@ void Unit::setClosestEnemyNum(int number)
 
 void Unit::getPos(int &ypos, int &xpos)
 {
-
 	ypos = _ypos;
 	xpos = _xpos;
 }
 
 void Unit::takeDamage(int attackRoll)
 {
-
 	attackRoll -= _defence;
 	//check if attack does damage
 	if (attackRoll > 0)
