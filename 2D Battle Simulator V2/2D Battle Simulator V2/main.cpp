@@ -16,6 +16,5 @@ int main()
 	{
 		isGameDone = Gamesystem::playGame();
 	}
-	system("PAUSE");
 	return 0;
 }

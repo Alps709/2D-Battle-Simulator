@@ -26,20 +26,12 @@ namespace Level
 	void printBattleStats();
 	void printBattleField();
 
+	int getUnitTeamSize(int teamNum);
+
 	void yourTeamMove();
 	void enemyTeamMove();
-
-	int findClosestUnit(int unitYpos, int unitXpos);
-	int findClosestEnemyUnit(int unitYpos, int unitXpos);
-
-	bool canMove(int yPos, int xPos, int direction, int direction2);
 	void moveUnit(Unit *unit);
-
 	void unitsBattle(Unit *attackingUnit, Unit *defendingUnit);
-
-	int setDefenderTeamNum(int attackingTeamNum);
-
-	int getUnitTeamSize(int teamNum);
 
 	void clearStuff();
 };

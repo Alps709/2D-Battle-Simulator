@@ -14,6 +14,13 @@ int _battleFieldTrueSize;
 vector <Unit> _unitTeam[2];
 vector <vector <Unit*> > _battleField;
 
+int findClosestUnit(int unitYpos, int unitXpos);
+int findClosestEnemyUnit(int unitYpos, int unitXpos);
+
+bool canMove(int yPos, int xPos, int direction, int direction2);
+
+int setDefenderTeamNum(int attackingTeamNum);
+
 int Level::getUnitTeamSize(int teamNum)
 {
 	int numAlive = 0;
@@ -294,7 +301,6 @@ void Level::generateBattlefield()
 			}
 		}
 	}
-	system("PAUSE");
 }
 
 void Level::clearStuff()
@@ -351,14 +357,13 @@ void Level::printBattleField()
 	{
 		//Prints the left side border
 		cout << "#  ";
-		//prints the board
+		//prints the battlefield
 		for (int j = 0; j < _battleField.size(); j++)
 		{
 			cout << _battleField[i][j]->getTile() << "  ";
 		}
 		//prints the right side border
-		cout << "#";
-		cout << endl;
+		cout << "#\n";
 	}
 	//Print the bottom border
 	for (int m = 0; m < _battleFieldSQRT + 2; m++)
@@ -436,7 +441,7 @@ void Level::enemyTeamMove()
 }
 
 
-int Level::findClosestUnit(int unitYpos, int unitXpos)
+int findClosestUnit(int unitYpos, int unitXpos)
 {
 
 	int enemyYPos, enemyXPos;
@@ -452,9 +457,9 @@ int Level::findClosestUnit(int unitYpos, int unitXpos)
 			_unitTeam[1][i].getPos(enemyYPos, enemyXPos);
 			//calculates manhattan distance to currently selected enemy
 			int distance = abs(enemyYPos - unitYpos) + abs(enemyXPos - unitXpos);
-
+			
 			if (i == 0 || distance < shortestDistance)
-			{
+			{	//sets new shortest distance
 				shortestDistance = distance;
 				unitINumber = i;
 			}
@@ -463,7 +468,7 @@ int Level::findClosestUnit(int unitYpos, int unitXpos)
 	return unitINumber;
 }
 
-int Level::findClosestEnemyUnit(int unitYpos, int unitXpos)
+int findClosestEnemyUnit(int unitYpos, int unitXpos)
 {
 
 	int enemyYPos, enemyXPos;
@@ -476,7 +481,6 @@ int Level::findClosestEnemyUnit(int unitYpos, int unitXpos)
 		//checks if current enemy unit is alive
 		if (_unitTeam[0][i].getHealth() > 0)
 		{
-
 			_unitTeam[0][i].getPos(enemyYPos, enemyXPos);
 			//calculates manhattan distance to currently selected enemy
 			int distance = abs(unitYpos - enemyYPos) + abs(unitXpos - enemyXPos);
@@ -491,7 +495,7 @@ int Level::findClosestEnemyUnit(int unitYpos, int unitXpos)
 	return unitINumber;
 }
 
-bool Level::canMove(int yPos, int xPos, int direction, int direction2)
+bool canMove(int yPos, int xPos, int direction, int direction2)
 {
 	//checks to see if new position is clear
 	return (_battleField[yPos + direction][xPos + direction2]->getTile() == '.');
@@ -499,7 +503,6 @@ bool Level::canMove(int yPos, int xPos, int direction, int direction2)
 
 void Level::moveUnit(Unit *movingUnit)
 {
-
 	int closestEnemyNum = movingUnit->getClosestEnemyNum();
 	int attackingTeamNum = movingUnit->getTeamNum();
 	int defendingTeamNum = setDefenderTeamNum(attackingTeamNum);
@@ -508,6 +511,7 @@ void Level::moveUnit(Unit *movingUnit)
 
 	int enemyYpos, enemyXpos, unitYpos, unitXpos;
 
+	//gets the position of the moving unit, and the defending unit (which is the closest enemy unit).
 	movingUnit->getPos(unitYpos, unitXpos);
 	defendingUnit->getPos(enemyYpos, enemyXpos);
 
@@ -547,7 +551,7 @@ void Level::moveUnit(Unit *movingUnit)
 		_battleField[unitYpos][unitXpos] = &units[units.size() - 1];
 	}
 }
-int Level::setDefenderTeamNum(int attackingTeamNum)
+int setDefenderTeamNum(int attackingTeamNum)
 {
 	//type casting a bool to an int (false = 0, true = 1)
 	//so this sets the defending team the opposite number of the attacking team
@@ -556,9 +560,11 @@ int Level::setDefenderTeamNum(int attackingTeamNum)
 
 void Level::unitsBattle(Unit *attackingUnit, Unit *defendingUnit)
 {
+	//initializes random generator
 	mt19937 randomGenerator(time(NULL));
 	uniform_int_distribution <int> unitAttackRoll(1, attackingUnit->getAttack());
 
+	//applys damage to the defending unit based from random attack roll
 	defendingUnit->takeDamage(unitAttackRoll(randomGenerator));
 
 	//check if defending unit died

@@ -25,7 +25,6 @@ bool Gamesystem::playGame()
 
 	while (isDone == false)
 	{
-
 		//if you enter q it exits the loop and stops the program
 		if (Level::chooseUnit())
 		{
@@ -46,6 +45,8 @@ bool Gamesystem::playGame()
 		//Initial print of the board
 		Level::printBattleStats();
 		Level::printBattleField();
+
+		cout << "\nPress any key to start the battle!\n";
 		_getch();
 
 		isDone2 = false;
@@ -59,7 +60,8 @@ bool Gamesystem::playGame()
 			system("cls");
 			Level::printBattleStats();
 			Level::printBattleField();
-			_getch();
+
+			Sleep(500);
 
 			//checks if a team won
 			getWin();
@@ -69,16 +71,22 @@ bool Gamesystem::playGame()
 	return true;
 }
 
-void initUnits()
+void Gamesystem::clearCin()
 {
-	Level::units.push_back(Unit("Soldier", 'S', 20, 5, 100));
-	Level::units.push_back(Unit("Berserker", 'B', 35, 1, 100));
-	Level::units.push_back(Unit("Guardian", 'G', 11, 10, 100));
-	Level::units.push_back(Unit("Wizard", 'W', 40, 0, 100));
-	Level::units.push_back(Unit("Goblin", 'G', 10, 0, 50));
-	Level::units.push_back(Unit("Ogre", 'O', 35, 5, 150));
-	Level::units.push_back(Unit("Dragon", 'D', 50, 10, 300));
-	Level::units.push_back(Unit("NOUNIT", '.', 0, 0, 0));
+	cin.ignore(64, '\n'); //These two functions clear the input 
+	cin.clear();          //for when cin is next used, otherwise errors can occur
+}
+
+void initUnits()
+{								//name		tile  att def hp
+	Level::units.push_back(Unit("Soldier",   'S', 20,  5, 100));
+	Level::units.push_back(Unit("Berserker", 'B', 35,  1, 100));
+	Level::units.push_back(Unit("Guardian",  'G', 11, 10, 100));
+	Level::units.push_back(Unit("Wizard",    'W', 40,  0, 100));
+	Level::units.push_back(Unit("Goblin",    'G', 10,  0,  50));
+	Level::units.push_back(Unit("Ogre",      'O', 35,  5, 150));
+	Level::units.push_back(Unit("Dragon",    'D', 50, 10, 300));
+	Level::units.push_back(Unit("NOUNIT",    '.',  0,  0,   0));
 }
 
 void startGame()
@@ -89,8 +97,8 @@ void startGame()
 	system("cls");
 	printf("Welcome to the 2D Combat Simulator %s!\n\n", _playerName.c_str());
 	printf("This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
-		"You will be able to choose what type of unit each team will get\nand how many will be in each team."
-		"\nWhich ever team defeats all of the other teams units will win.\n");
+		   "You will be able to choose what type of unit each team will get\nand how many will be in each team."
+		   "\nWhich ever team defeats all of the other teams units will win.\n");
 	system("PAUSE");
 }
 
@@ -145,10 +153,4 @@ void getWin()
 		cout << "\nYOU LOST!\n";
 		playAgain();
 	}
-}
-
-void Gamesystem::clearCin()
-{
-	cin.ignore(64, '\n'); //These two functions clear the input 
-	cin.clear();          //for when cin is next used, otherwise errors can occur
 }
