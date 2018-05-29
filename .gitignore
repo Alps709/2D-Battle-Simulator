@@ -2,3 +2,13 @@
 2D Battle Simulator V2/.vs/2D Battle Simulator V2/v15/ipch/AutoPCH/bd0c45e988f07dc4/UNIT.ipch
 2D Battle Simulator V2/.vs/2D Battle Simulator V2/v15/.suo
 2D Battle Simulator V2/.vs/2D Battle Simulator V2/v15/Browse.VC.opendb
+*.ipch
+*.obj
+*.exe
+*.log
+*.tlog
+*.vcxproj
+*.idb
+*.ilk
+*.pdb
+*.user
