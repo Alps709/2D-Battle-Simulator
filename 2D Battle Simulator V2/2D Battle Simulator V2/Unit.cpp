@@ -1,10 +1,12 @@
 #include "Unit.h"
 
-//int Unit::_unitTeamNum;
+//these private static member variables need to be declared here or a linker error occurs (Error LNK2001)
 int Unit::_unitTeamSize;
 int Unit::_unitEnemySize;
 string Unit::_unitTeamName;
 string Unit::_unitEnemyName;
+char Unit::_unitTeamTile;
+char Unit::_unitEnemyTile;
 
 Unit::Unit(string name, char tile, int attack, int defence, int hitpoints)
 :_tile(tile), _unitName(name), _attack(attack), _defence(defence), _hitpoints(hitpoints)
@@ -26,14 +28,22 @@ void Unit::setUnitCoords(int ypos, int xpos)
 
 void Unit::setTeamSize(int size)
 {
-
 	_unitTeamSize = size;
 }
 
 void Unit::setEnemySize(int size)
 {
-
 	_unitEnemySize = size;
+}
+
+void Unit::setTeamTile(char tile)
+{
+	_unitTeamTile = tile;
+}
+
+void Unit::setEnemyTile(char tile)
+{
+	_unitEnemyTile = tile;
 }
 
 void Unit::setTeamName(string name)

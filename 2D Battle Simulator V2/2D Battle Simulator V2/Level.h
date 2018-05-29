@@ -9,8 +9,6 @@
 
 using namespace std;
 
-
-
 namespace Level
 {
 	extern vector <Unit> units;
@@ -28,8 +26,7 @@ namespace Level
 
 	int getUnitTeamSize(int teamNum);
 
-	void yourTeamMove();
-	void enemyTeamMove();
+	void teamsMove();
 	void moveUnit(Unit *unit);
 	void unitsBattle(Unit *attackingUnit, Unit *defendingUnit);
 

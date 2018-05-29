@@ -1,9 +1,10 @@
+#include <Windows.h>
 #include "Gamesystem.h"
 #include "Level.h"
 
 using namespace std;
 
-vector <Unit> Level::units;
+vector <Unit> Level::units; 
 
 string _playerName;
 
@@ -15,9 +16,9 @@ void initUnits();
 void startGame();
 void playAgain();
 
-//Getters
 bool checkWin(int teamNum);
 
+//MAIN GAME LOOP
 bool Gamesystem::playGame()
 {
 	initUnits();
@@ -53,18 +54,17 @@ bool Gamesystem::playGame()
 		while (isDone2 == false)
 		{
 			//The teams units all move
-			Level::yourTeamMove();
-			Level::enemyTeamMove();
+			Level::teamsMove();
 
 			//Updates board
 			system("cls");
 			Level::printBattleStats();
 			Level::printBattleField();
 
-			Sleep(500);
-
 			//checks if a team won
 			getWin();
+
+			Sleep(500);
 		}
 		Level::clearStuff();
 	}
