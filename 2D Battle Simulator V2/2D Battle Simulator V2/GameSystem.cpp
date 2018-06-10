@@ -21,24 +21,26 @@ bool checkWin(int teamNum);
 //MAIN GAME LOOP
 bool Gamesystem::playGame()
 {
+	int yourTeamNum = 0;
+	int enemyTeamNum = 1;
 	initUnits();
 	startGame();
 
 	while (isDone == false)
 	{
 		//if you enter q it exits the loop and stops the program
-		if (Level::chooseUnit())
+		if (Level::chooseUnit(yourTeamNum))
 		{
 			return true;
 		}
-		Level::chooseYTeamSize();
+		Level::chooseTeamsSize(yourTeamNum);
 
 		//if you enter q it exits the loop and stops the program
-		if (Level::chooseEnemyUnit())
+		if (Level::chooseUnit(enemyTeamNum))
 		{
 			return true;
 		}
-		Level::chooseETeamSize();
+		Level::chooseTeamsSize(enemyTeamNum);
 
 		Level::generateTeams();
 		Level::generateBattlefield();
@@ -73,8 +75,15 @@ bool Gamesystem::playGame()
 
 void Gamesystem::clearCin()
 {
-	cin.ignore(64, '\n'); //These two functions clear the input 
-	cin.clear();          //for when cin is next used, otherwise errors can occur
+	cin.ignore(64, '\n');
+	cin.clear();
+}
+
+void Gamesystem::invalidInput(string input)
+{
+	cout << "\nYou inputted: " << input << "\n\n";
+	cout << "That is an invalid input! Please try again.\n";
+	system("PAUSE");
 }
 
 void initUnits()
@@ -92,14 +101,38 @@ void initUnits()
 void startGame()
 {
 	printf("Welcome to the 2D Combat Simulator!\n\nPlease enter your name: ");
-	cin >> _playerName;
-	Gamesystem::clearCin();
+	cin>> _playerName;
+
 	system("cls");
-	printf("Welcome to the 2D Combat Simulator %s!\n\n", _playerName.c_str());
-	printf("This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
+	printf("Welcome to the 2D Combat Simulator %s!\n\n"
+		   "This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
 		   "You will be able to choose what type of unit each team will get\nand how many will be in each team."
-		   "\nWhich ever team defeats all of the other teams units will win.\n");
+		   "\nWhich ever team defeats all of the other teams units will win.\n", _playerName.c_str());
 	system("PAUSE");
+}
+
+void getWin()
+{
+	if (checkWin(0) && checkWin(1))
+	{
+		cout << "\nYOU TIED!\n";
+		playAgain();
+	}
+	else if (checkWin(1))
+	{
+		cout << "\nYOU WON!\n";
+		playAgain();
+	}
+	else if (checkWin(0))
+	{
+		cout << "\nYOU LOST!\n";
+		playAgain();
+	}
+}
+
+bool checkWin(int teamNum)
+{
+	return (Level::getUnitTeamSize(teamNum) == 0);
 }
 
 void playAgain()
@@ -107,7 +140,7 @@ void playAgain()
 	cout << "\nDo you want to play again? (y/n)\n";
 
 	string yesOrNo;
-	
+
 	while (true)
 	{
 		cin >> yesOrNo;
@@ -128,29 +161,5 @@ void playAgain()
 		{
 			cout << "\nYou did not enter a valid character,\nplease enter 'y' or 'n':";
 		}
-	}
-}
-
-bool checkWin(int teamNum)
-{
-	return (Level::getUnitTeamSize(teamNum) == 0);
-}
-
-void getWin()
-{
-	if (checkWin(0) && checkWin(1))
-	{
-		cout << "\nYOU TIED!\n";
-		playAgain();
-	}
-	else if (checkWin(1))
-	{
-		cout << "\nYOU WON!\n";
-		playAgain();
-	}
-	else if (checkWin(0))
-	{
-		cout << "\nYOU LOST!\n";
-		playAgain();
 	}
 }

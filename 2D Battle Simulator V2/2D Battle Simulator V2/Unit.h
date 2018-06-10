@@ -39,12 +39,9 @@ public:
 
 	//Setters
 	void setTeamNum(int num);
-	static void setTeamSize(int size);
-	static void setEnemySize(int size);
-	static void setTeamTile(char tile);
-	static void setEnemyTile(char tile);
-	static void setTeamName(string name);
-	static void setEnemyName(string name);
+	static void setTeamsSize(int teamNum, int size);
+	static void setTeamsTile(int teamNum, char tile);
+	static void setTeamsName(int teamNum, string name);
 
 	void setClosestEnemyNum(int number);
 	void setUnitCoords(int ypos, int xpos);

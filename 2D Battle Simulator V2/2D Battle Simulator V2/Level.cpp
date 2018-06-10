@@ -1,6 +1,7 @@
 #include <math.h>
 #include <random>
 #include <ctime>
+#include <Windows.h>
 
 #include "Level.h"
 #include "GameSystem.h"
@@ -19,8 +20,8 @@ int setDefenderTeamNum(int attackingTeamNum);
 int findClosestUnit(int unitYpos, int unitXpos, int teamNum);
 
 bool canMove(int yPos, int xPos, int direction, int direction2);
-bool chooseUnitByName(string &unitName, vector <Unit> &units);
-bool chooseUnitByNumber(int &unitNumber, vector <Unit> &units);
+bool chooseUnitByName(int teamNum, string &unitName, vector <Unit> &units);
+bool chooseUnitByNumber(int teamNum, int &unitNumber, vector <Unit> &units);
 
 int Level::getUnitTeamSize(int teamNum)
 {
@@ -36,22 +37,21 @@ int Level::getUnitTeamSize(int teamNum)
 	return numAlive;
 }
 
-bool Level::chooseUnit()
+bool Level::chooseUnit(int teamNum)
 {
 	while (true)
 	{
 		string unitName;
-		bool validName = false;
 
 		system("cls");
-		printf("Choose which unit you want on your team.\nThese are the units you have to choose from:\n\n");
+		printf("Choose which unit you want on team %d.\nThese are the units you have to choose from:\n\n", teamNum + 1);
 		listUnits();
 
 		cin >> unitName;
 		Gamesystem::clearCin();
 
 		//choose unit by full name
-		if (!chooseUnitByName(unitName, units))
+		if (!chooseUnitByName(teamNum, unitName, units))
 		{
 			return false;
 		}
@@ -66,10 +66,16 @@ bool Level::chooseUnit()
 			}
 			catch (...) //catches any exception from invalid stoi() input
 			{
-				goto invalidinput;
+				Gamesystem::invalidInput(unitName);
+				continue;
 			}
-
-			if (!chooseUnitByNumber(unitNumber, units))
+			//checks if the number is within the acceptable range
+			if (unitNumber < 1 || unitNumber > 7) 
+			{
+				Gamesystem::invalidInput(unitName);
+				continue;
+			}
+			else if(!chooseUnitByNumber(teamNum, unitNumber, units))
 			{
 				return false;
 			}
@@ -80,113 +86,39 @@ bool Level::chooseUnit()
 		}
 		else
 		{
-			invalidinput:
-			cout << "\nYou inputted: " << unitName << "\n\n";
-			cout << "That is an invalid unit name! Please try again.\n";
-			system("PAUSE");
+			Gamesystem::invalidInput(unitName);
 		}
 	}
 }
 
-bool chooseUnitByName(string &unitName, vector <Unit> &units)
+bool chooseUnitByName(int teamNum, string &unitName, vector <Unit> &units)
 {
 	//allows you to choose unit by entering the full unit name
 	for (int i = 0; i < units.size() - 1; i++)
 	{
 		if (units[i].getName() == unitName)
 		{
-			Unit::setTeamName(unitName);
-			Unit::setTeamTile(units[i].getTile());
+			Unit::setTeamsName(teamNum, unitName);
+			Unit::setTeamsTile(teamNum, units[i].getTile());
 			return false;
 		}
 	}
 	return true;
 }
 
-bool chooseUnitByNumber(int &unitNumber, vector <Unit> &units)
+bool chooseUnitByNumber(int teamNum, int &unitNumber, vector <Unit> &units)
 {
 	//allows you to choose unit by entering the unit number instead of typing the full unit name
-	int j = 1;
-	for (int i = 0; i < units.size() - 1; i++)
+	for (int i = 0; i < units.size(); i++)
 	{
-
-		if (unitNumber == j)
+		if (unitNumber - 1 == i) //-1 is added here because player chooses 1-7, but units array is 0-6
 		{
-			Unit::setTeamName(units[j - 1].getName());
-			Unit::setTeamTile(units[i].getTile());
+			Unit::setTeamsName(teamNum, units[i].getName());
+			Unit::setTeamsTile(teamNum, units[i].getTile());
 			return false;
 		}
-		j++;
 	}
 	return true;
-}
-
-bool Level::chooseEnemyUnit()
-{
-	while (true)
-	{
-		string unitEnemyName;
-		bool validName = false;
-
-		system("cls");
-		printf("Choose which unit you want on the enemy team.\nThese are the units you have to choose from:\n\n");
-		listUnits();
-
-		cin >> unitEnemyName;
-		Gamesystem::clearCin();
-
-		//allows you to choose unit by entering the full unit name
-		for (int i = 0; i < units.size() - 1; i++)
-		{
-
-			if (units[i].getName() == unitEnemyName)
-			{
-				Unit::setEnemyName(unitEnemyName);
-				Unit::setEnemyTile(units[i].getTile());
-				return false;
-			}
-		}
-		if (unitEnemyName != "")
-		{
-			int unitNumber;
-			try
-			{
-				//this gets a string of a number eg("1") and converts it into an int (1)
-				unitNumber = stoi(unitEnemyName.c_str());
-			}
-			catch (...) //catches any exception from invalid stoi() input
-			{
-				goto invalidinput;
-			}
-			//allows you to choose the unit by entering the unit number instead of typing the full unit name
-			if (validName == false)
-			{
-				int j = 1;
-
-				for (int i = 0; i < units.size(); i++)
-				{
-					if (unitNumber == j)
-					{
-						Unit::setEnemyName(units[j - 1].getName());
-						Unit::setEnemyTile(units[i].getTile());
-						return false;
-					}
-					j++;
-				}
-			}
-		}
-		if (unitEnemyName == "q" || unitEnemyName == "Q")
-		{
-			return true;
-		}
-		else
-		{
-			invalidinput:
-			cout << "\nYou inputted: " << unitEnemyName << "\n\n";
-			cout << "That is an invalid unit name! Please try again.\n";
-			system("PAUSE");
-		}
-	}
 }
 
 void Level::listUnits()
@@ -203,30 +135,51 @@ void Level::listUnits()
 	}
 }
 
-void Level::chooseYTeamSize()
+void Level::chooseTeamsSize(int teamNum)
 {
-	system("cls");
-	
-	int size;
+	int teamSize;
 
-	printf("How many units do you want in your team?\n");
-	cin >> size;
-	Gamesystem::clearCin();
-	Unit::setTeamSize(size);
-}
+	while (true)
+	{
+		string size;
+		system("cls");
+		printf("How many units do you want in this team?\n");
+		cin >> size;
+		Gamesystem::clearCin();
 
-void Level::chooseETeamSize()
-{
-	system("cls");
+		try
+		{//this gets a string of a number eg("1") and converts it into an int (1)
+			teamSize = stoi(size.c_str());
+		}
+		catch (...) //catches any exception from invalid stoi() input
+		{
+			Gamesystem::invalidInput(size);
+			continue;
+		}
 
-	int size;
-
-	printf("How many units do you want in the enemy team?\n");
-	cin >> size;
-	Gamesystem::clearCin();
-
-	Unit::setEnemySize(size);
-	system("cls");
+		if (size == "")
+		{
+			cout << "Please enter a number." << endl;
+			system("PAUSE");
+			continue;
+		}
+		else if (teamSize < 1)
+		{
+			Gamesystem::invalidInput(size);
+			continue;
+		}
+		else if (teamSize > 999)
+		{
+			cout << "\nYou inputted: " << teamSize << "\n\n";
+			cout << "That value is too large! Please enter a number less than 1000.\n";
+			system("PAUSE");
+		}
+		else
+		{
+			Unit::setTeamsSize(teamNum, teamSize);
+			return;
+		}
+	}
 }
 
 void Level::generateTeams()
@@ -338,26 +291,27 @@ void Level::printBattleStats()
 {
 	int units0Alive = 0;
 	int units1Alive = 0;
-
-	//first loop to change between the teams
-	for (int j = 0; j < 2; j++)
+	//Team 1
+	for (int i = 0; i < _unitTeam[0].size(); i++)
 	{
-		//second loop to go through the units
-		for (int i = 0; i < _unitTeam[j].size(); i++)
+		//checks to make sure it's the right team, then only counts units with more than 0 hp
+		if (_unitTeam[0][i].getHealth() > 0)
 		{
-			//checks to make sure it's the right team, then only counts units with more than 0 hp
-			if (j == 0 && _unitTeam[0][i].getHealth() > 0)
-			{
-				units0Alive++;
-			}
-			//checks to make sure it's the right team, then only counts units with more than 0 hp
-			if (j == 1 && _unitTeam[1][i].getHealth() > 0)
-			{
-				units1Alive++;
-			}
+			units0Alive++;
 		}
 	}
+	//Team 2
+	for (int i = 0; i < _unitTeam[1].size(); i++)
+	{
+		//checks to make sure it's the right team, then only counts units with more than 0 hp
+		if (_unitTeam[1][i].getHealth() > 0)
+		{
+			units1Alive++;
+		}
+	}
+
 	//displays # of alive units
+	system("cls");
 	cout << "Total units alive: " << units0Alive + units1Alive << ".\n"
 		 << "Number of Team 1's units alive: " << units0Alive << ".\n"
 		 << "Number of Team 2's units alive: " << units1Alive << ".\n";
@@ -400,6 +354,7 @@ void Level::teamsMove()
 	//change between teams
 	for (int teamNum = 0; teamNum < 2; teamNum++)
 	{
+		//change between units within the same team
 		for (int unitNum = 0; unitNum < _unitTeam[teamNum].size(); unitNum++)
 		{
 			//the current unit
@@ -414,7 +369,7 @@ void Level::teamsMove()
 				unitNum--;
 				continue;
 			}
-
+			//get unit's position
 			int unitYPos, unitXPos;
 			unit->getPos(unitYPos, unitXPos);
 
@@ -423,12 +378,12 @@ void Level::teamsMove()
 			//saves the shortest distance while iterating.
 			unit->setClosestEnemyNum(findClosestUnit(unitYPos, unitXPos, (int)(!(bool)teamNum)));
 			                                                          //           ^
-			//Handles moving or battling of the selected unit         //lemme explain this shit 
+			//Handles moving or battling of the selected unit         //Lemme explain this shit. 
 			moveUnit(unit);                                           //I need the opposite teamNum,
 		}                                                             //so I cast it to a bool 
 	}                                                                 //and use ! to reverse the value
 }                                                                     //then cast it back to an int
-                                                                      //so it turns a 0 into a 1, and a 1 into a 0
+                                                                      //so it turns a 0 into a 1, and a 1 into a 0.
 int findClosestUnit(int unitYpos, int unitXpos, int teamNum)
 {
 	int enemyYPos, enemyXPos;
@@ -481,7 +436,7 @@ void Level::moveUnit(Unit *movingUnit)
 	int distance = ady + adx;
 
 	if (distance == 1)
-	{//BATTLERUUUUUUUUUUUU!
+	{//BATTURUUU!
 		unitsBattle(movingUnit, defendingUnit);
 	}
 	else if (ady >= adx && dy > 0 && canMove(unitYpos, unitXpos, 1, 0))
@@ -522,8 +477,10 @@ int setDefenderTeamNum(int attackingTeamNum)
 void Level::unitsBattle(Unit *attackingUnit, Unit *defendingUnit)
 {
 	//initializes random generator
-	mt19937 randomGenerator(time(NULL)*time(NULL));
+	mt19937 randomGenerator(time(0)*time(0));
 	uniform_int_distribution <int> unitAttackRoll(1, attackingUnit->getAttack());
+	//Have to sleep for 1 millisecond to get a different random number roll each time
+	Sleep(1);
 
 	//applys damage to the defending unit based from random attack roll
 	defendingUnit->takeDamage(unitAttackRoll(randomGenerator));

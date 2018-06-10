@@ -10,5 +10,6 @@ namespace Gamesystem
 {
 	bool playGame();
 	void clearCin();
+	void invalidInput(string input);
 }
 

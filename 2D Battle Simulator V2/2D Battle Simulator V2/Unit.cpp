@@ -26,34 +26,41 @@ void Unit::setUnitCoords(int ypos, int xpos)
 	_ypos = ypos;
 }
 
-void Unit::setTeamSize(int size)
+void Unit::setTeamsSize(int teamNum, int size)
 {
-	_unitTeamSize = size;
+	if (!(bool)teamNum)
+	{
+		_unitTeamSize = size;
+	}
+	else
+	{
+		_unitEnemySize = size;
+	}
+
 }
 
-void Unit::setEnemySize(int size)
+void Unit::setTeamsTile(int teamNum, char tile)
 {
-	_unitEnemySize = size;
+	if (!(bool)teamNum)
+	{
+		_unitTeamTile = tile;
+	}
+	else
+	{
+		_unitEnemyTile = tile;
+	}
 }
 
-void Unit::setTeamTile(char tile)
+void Unit::setTeamsName(int teamNum, string name)
 {
-	_unitTeamTile = tile;
-}
-
-void Unit::setEnemyTile(char tile)
-{
-	_unitEnemyTile = tile;
-}
-
-void Unit::setTeamName(string name)
-{
-	_unitTeamName = name;
-}
-
-void Unit::setEnemyName(string name)
-{
-	_unitEnemyName = name;
+	if (!(bool)teamNum)
+	{
+		_unitTeamName = name;
+	}
+	else
+	{
+		_unitEnemyName = name;
+	}
 }
 
 void Unit::setTeamNum(int num)

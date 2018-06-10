@@ -13,10 +13,8 @@ namespace Level
 {
 	extern vector <Unit> units;
 
-	bool chooseUnit();
-	bool chooseEnemyUnit();
-	void chooseYTeamSize();
-	void chooseETeamSize();
+	bool chooseUnit(int teamNum);
+	void chooseTeamsSize(int teamNum);
 	void listUnits();
 
 	void generateTeams();
