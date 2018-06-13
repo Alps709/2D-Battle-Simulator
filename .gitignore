@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 #Project Debug folder
-Debug/
+!Debug/2D Battle Simulator V2.exe
 
 # User-specific files
 *.suo
