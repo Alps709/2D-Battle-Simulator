@@ -87,7 +87,7 @@ void Gamesystem::invalidInput(string input)
 }
 
 void initUnits()
-{								//name		tile  att def hp
+{                               //name       tile att def hp
 	Level::units.push_back(Unit("Soldier",   'S', 20,  5, 100));
 	Level::units.push_back(Unit("Berserker", 'B', 35,  1, 100));
 	Level::units.push_back(Unit("Guardian",  'G', 11, 10, 100));
