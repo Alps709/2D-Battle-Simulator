@@ -9,7 +9,7 @@ char Unit::_unitTeamTile;
 char Unit::_unitEnemyTile;
 
 Unit::Unit(string name, char tile, int attack, int defence, int hitpoints)
-:_tile(tile), _unitName(name), _attack(attack), _defence(defence), _hitpoints(hitpoints)
+	:_tile(tile), _unitName(name), _attack(attack), _defence(defence), _hitpoints(hitpoints)
 {}
 
 void Unit::getStats(string &name, int &attack, int &defence, int &hitpoints)

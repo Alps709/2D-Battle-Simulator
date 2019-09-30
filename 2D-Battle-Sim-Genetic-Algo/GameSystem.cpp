@@ -4,7 +4,7 @@
 
 using namespace std;
 
-vector <Unit> Level::units; 
+vector <Unit> Level::units;
 
 string _playerName;
 
@@ -88,26 +88,26 @@ void Gamesystem::invalidInput(string input)
 
 void initUnits()
 {                               //name       tile att def hp
-	Level::units.push_back(Unit("Soldier",   'S', 20,  5, 100));
-	Level::units.push_back(Unit("Berserker", 'B', 35,  1, 100));
-	Level::units.push_back(Unit("Guardian",  'G', 11, 10, 100));
-	Level::units.push_back(Unit("Wizard",    'W', 40,  0, 100));
-	Level::units.push_back(Unit("Goblin",    'G', 10,  0,  50));
-	Level::units.push_back(Unit("Ogre",      'O', 35,  5, 150));
-	Level::units.push_back(Unit("Dragon",    'D', 50, 10, 300));
-	Level::units.push_back(Unit("NOUNIT",    '.',  0,  0,   0));
+	Level::units.push_back(Unit("Soldier", 'S', 20, 5, 100));
+	Level::units.push_back(Unit("Berserker", 'B', 35, 1, 100));
+	Level::units.push_back(Unit("Guardian", 'G', 11, 10, 100));
+	Level::units.push_back(Unit("Wizard", 'W', 40, 0, 100));
+	Level::units.push_back(Unit("Goblin", 'G', 10, 0, 50));
+	Level::units.push_back(Unit("Ogre", 'O', 35, 5, 150));
+	Level::units.push_back(Unit("Dragon", 'D', 50, 10, 300));
+	Level::units.push_back(Unit("NOUNIT", '.', 0, 0, 0));
 }
 
 void startGame()
 {
 	printf("Welcome to the 2D Combat Simulator!\n\nPlease enter your name: ");
-	cin>> _playerName;
+	cin >> _playerName;
 
 	system("cls");
 	printf("Welcome to the 2D Combat Simulator %s!\n\n"
-		   "This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
-		   "You will be able to choose what type of unit each team will get\nand how many will be in each team."
-		   "\nWhich ever team defeats all of the other teams units will win.\n", _playerName.c_str());
+		"This is where you will choose two teams that battle it out\nto see who is the strongest.\n"
+		"You will be able to choose what type of unit each team will get\nand how many will be in each team."
+		"\nWhich ever team defeats all of the other teams units will win.\n", _playerName.c_str());
 	system("PAUSE");
 }
 
@@ -163,3 +163,4 @@ void playAgain()
 		}
 	}
 }
+

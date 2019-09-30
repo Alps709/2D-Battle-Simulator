@@ -70,12 +70,12 @@ bool Level::chooseUnit(int teamNum)
 				continue;
 			}
 			//checks if the number is within the acceptable range
-			if (unitNumber < 1 || unitNumber > 7) 
+			if (unitNumber < 1 || unitNumber > 7)
 			{
 				Gamesystem::invalidInput(unitName);
 				continue;
 			}
-			else if(!chooseUnitByNumber(teamNum, unitNumber, units))
+			else if (!chooseUnitByNumber(teamNum, unitNumber, units))
 			{
 				return false;
 			}
@@ -186,7 +186,7 @@ void Level::generateTeams()
 {
 	string yourUnitName = Unit::getTeamName();
 	string enemyUnitName = Unit::getEnemyName();
-	 
+
 	//Your team gets generated and stored in the vector
 	for (int i = 0; i <= units.size(); i++)
 	{
@@ -313,8 +313,8 @@ void Level::printBattleStats()
 	//displays # of alive units
 	system("cls");
 	cout << "Total units alive: " << units0Alive + units1Alive << ".\n"
-		 << "Number of Team 1's units alive: " << units0Alive << ".\n"
-		 << "Number of Team 2's units alive: " << units1Alive << ".\n";
+		<< "Number of Team 1's units alive: " << units0Alive << ".\n"
+		<< "Number of Team 2's units alive: " << units1Alive << ".\n";
 }
 
 void Level::printBattleField()
@@ -350,7 +350,7 @@ void Level::printBattleField()
 }
 
 void Level::teamsMove()
-{   
+{
 	//change between teams
 	for (int teamNum = 0; teamNum < 2; teamNum++)
 	{
@@ -377,13 +377,13 @@ void Level::teamsMove()
 			//to the position of the currently selected unit, and finds the distance between them.
 			//saves the shortest distance while iterating.
 			unit->setClosestEnemyNum(findClosestUnit(unitYPos, unitXPos, (int)(!(bool)teamNum)));
-			                                                          //           ^
-			//Handles moving or battling of the selected unit         //Lemme explain this shit. 
+			//           ^
+//Handles moving or battling of the selected unit         //Lemme explain this shit. 
 			moveUnit(unit);                                           //I need the opposite teamNum,
 		}                                                             //so I cast it to a bool 
 	}                                                                 //and use ! to reverse the value
 }                                                                     //then cast it back to an int
-                                                                      //so it turns a 0 into a 1, and a 1 into a 0.
+																	  //so it turns a 0 into a 1, and a 1 into a 0.
 int findClosestUnit(int unitYpos, int unitXpos, int teamNum)
 {
 	int enemyYPos, enemyXPos;
@@ -399,7 +399,7 @@ int findClosestUnit(int unitYpos, int unitXpos, int teamNum)
 			_unitTeam[teamNum][i].getPos(enemyYPos, enemyXPos);
 			//calculates manhattan distance to currently selected enemy
 			int distance = abs(enemyYPos - unitYpos) + abs(enemyXPos - unitXpos);
-			
+
 			if (i == 0 || distance < shortestDistance)
 			{	//sets new shortest distance
 				shortestDistance = distance;
