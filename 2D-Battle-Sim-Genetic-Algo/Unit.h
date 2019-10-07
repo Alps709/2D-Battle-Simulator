@@ -10,7 +10,17 @@ class Unit
 {
 public:
 	Unit() {};
-	Unit(string name, char tile, int attack, int defence, int hitpoints);
+	Unit
+	(
+		string _name = "Default", 
+		char _tile = 'd', 
+		int _attack = 0, 
+		int _defence = 0, 
+		int _hitpoints = 0, 
+		int _dodgeChance = 0, 
+		int _parryChance = 0,
+		int _pReflectPercent = 0
+	);
 
 
 	void takeDamage(int attackRoll);
@@ -62,6 +72,9 @@ private:
 	int _closestEnemyNum;
 	int _attack;
 	int _defence;
+	int m_dodgeChance; //Avoids damage completely
+	int m_parryChance; //Reflects damage based on m_pReflectPercent
+	int m_pReflectPercent;
 	int _hitpoints;
 
 	//postion

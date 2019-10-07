@@ -12,9 +12,9 @@ int main()
 {
 	bool isGameDone = false;
 
-	while (isGameDone == false)
+	while (!isGameDone)
 	{
-		isGameDone = Gamesystem::playGame();
+		isGameDone = Gamesystem::play2DBSGame();
 	}
 	return 0;
 }

@@ -8,7 +8,7 @@ using namespace std;
 
 namespace Gamesystem
 {
-	bool playGame();
+	bool play2DBSGame();
 	void clearCin();
 	void invalidInput(string input);
 }

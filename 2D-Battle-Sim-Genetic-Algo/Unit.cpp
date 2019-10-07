@@ -8,9 +8,11 @@ string Unit::_unitEnemyName;
 char Unit::_unitTeamTile;
 char Unit::_unitEnemyTile;
 
-Unit::Unit(string name, char tile, int attack, int defence, int hitpoints)
-	:_tile(tile), _unitName(name), _attack(attack), _defence(defence), _hitpoints(hitpoints)
-{}
+Unit::Unit(string _name, char _tile, int _attack, int _defence, int _hitpoints, int _dodgeChance, int _parryChance, int _pReflectPercent)
+	:_tile(_tile), _unitName(_name), _attack(_attack), _defence(_defence), _hitpoints(_hitpoints), m_dodgeChance(_dodgeChance), m_parryChance(_parryChance), m_pReflectPercent(_pReflectPercent)
+{
+
+}
 
 void Unit::getStats(string &name, int &attack, int &defence, int &hitpoints)
 {
